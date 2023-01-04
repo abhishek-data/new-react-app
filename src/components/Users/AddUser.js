@@ -3,6 +3,7 @@ import Card from "../UI/Card";
 import Button from "../UI/Button";
 import classes from "./AddUser.module.css";
 import ErrorModal from "../UI/ErrorModal";
+import Wrapper from "../Helpers/Wrapper";
 
 const AddUser = (props) => {
   const [enteredUsername, setEnteredUserName] = useState("");
@@ -18,56 +19,62 @@ const AddUser = (props) => {
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    if (enteredUsername.trim().length === 0 || enteredAge.trim().length===0) {
-        setError({
-          title: 'Invalid Input',
-          message: 'Please enter a valid name and age(non empty value)'
-        })
-        return
-    }
-    if(+enteredAge < 1){
+    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
       setError({
-        title: 'Invalid Age',
-        message: 'Please enter a valid age (>0 )'
-      })
-        return
+        title: "Invalid Input",
+        message: "Please enter a valid name and age(non empty value)",
+      });
+      return;
+    }
+    if (+enteredAge < 1) {
+      setError({
+        title: "Invalid Age",
+        message: "Please enter a valid age (>0 )",
+      });
+      return;
     }
     const data = {
       username: enteredUsername,
-      age: enteredAge
+      age: enteredAge,
     };
-    
+
     props.onAddUser(data);
     setEnteredUserName("");
     setEnteredAge("");
   };
 
-  const errorHandler = () =>{
-    setError(null)
-  }
+  const errorHandler = () => {
+    setError(null);
+  };
   return (
-    <div>
-    {error && <ErrorModal title={error.title} message={error.message} onConfirm={errorHandler}/>}
-    <Card className={classes.input}>
-      <form onSubmit={addUserHandler}>
-        <label htmlFor="username">Username</label>
-        <input
-          onChange={addUsernameHandler}
-          value={enteredUsername}
-          id="username"
-          type="text"
+    <React.Fragment>
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onConfirm={errorHandler}
         />
-        <label htmlFor="age">Age(Years)</label>
-        <input
-          onChange={addAgeHandler}
-          value={enteredAge}
-          id="age"
-          type="number"
-        />
-        <Button type="submit">Add User</Button>
-      </form>
-    </Card>
-    </div>
+      )}
+      <Card className={classes.input}>
+        <form onSubmit={addUserHandler}>
+          <label htmlFor="username">Username</label>
+          <input
+            onChange={addUsernameHandler}
+            value={enteredUsername}
+            id="username"
+            type="text"
+          />
+          <label htmlFor="age">Age(Years)</label>
+          <input
+            onChange={addAgeHandler}
+            value={enteredAge}
+            id="age"
+            type="number"
+          />
+          <Button type="submit">Add User</Button>
+        </form>
+      </Card>
+    </React.Fragment>
   );
 };
 
